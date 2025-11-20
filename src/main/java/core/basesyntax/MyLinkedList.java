@@ -75,6 +75,9 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public boolean remove(T object) {
+        if (size == 0) {
+            return false;
+        }
         Node<T> currentNode = first;
         while (!((currentNode.item == object)
                 || (currentNode.item != null
@@ -109,12 +112,22 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private Node<T> findNodeByIndex(int index) {
-        Node<T> currentNode = first;
-        while (index > 0) {
-            currentNode = currentNode.next;
-            index--;
+        if (index <= (size / 2)) {
+            Node<T> currentNode = first;
+            while (index > 0) {
+                currentNode = currentNode.next;
+                index--;
+            }
+            return currentNode;
+        } else {
+            Node<T> currentNode = last;
+            index = size - index - 1;
+            while (index > 0) {
+                currentNode = currentNode.prev;
+                index--;
+            }
+            return currentNode;
         }
-        return currentNode;
     }
 
     private void unLink(Node currentNode) {
@@ -124,7 +137,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             currentNode.prev.next = currentNode.next;
         }
         if (currentNode.next == null) {
-            last = currentNode;
+            last = currentNode.prev;
         } else {
             currentNode.next.prev = currentNode.prev;
         }
